@@ -73,7 +73,17 @@ As part of the project, your first task is to run and test its main Django appli
 - Go to your forked repository.
 
 - Copy the git clone URL of the skeleton repository that you forked into your account.
+- Follow [instructions "Add static page"](./lectures/Module1_add_static_pages.pdf)
+### Working with light-weight, serverless db: sqlite3
 
+```sql
+sqlite3 db.sqlite3 # connect to db
+.table # list all tables
+.exit # quit 
+```
+![App running](./images/django_server.jpg)
 ### Run the Django app on development server
 
 # Reference
+1. [CSS syntax explained](https://www.wa4e.com/code/css/)
+2. 
