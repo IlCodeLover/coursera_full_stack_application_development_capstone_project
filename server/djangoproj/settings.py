@@ -28,8 +28,8 @@ SECRET_KEY =\
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-CSRF_TRUSTED_ORIGINS = []
+ALLOWED_HOSTS = ['localhost','127.0.0.1'] # list of hosts or domain names that are allowed to connect to your Django application, insert IP or host name wihtout protocol http
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000/']
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [],
