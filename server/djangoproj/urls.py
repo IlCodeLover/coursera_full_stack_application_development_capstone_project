@@ -27,5 +27,6 @@ urlpatterns = [
     path('contact/', TemplateView.as_view(template_name="Contact.html")),
     # login view is a REACT page rendered from a route that is configured in
     # /server/frontend/src/App.js
-    path('login/', TemplateView.as_view(template_name="index.html"))
+    path('login/', TemplateView.as_view(template_name="index.html")),
+    path('register/', TemplateView.as_view(template_name="index.html"))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
