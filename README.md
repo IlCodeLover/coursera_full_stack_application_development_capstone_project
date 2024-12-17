@@ -81,8 +81,91 @@ sqlite3 db.sqlite3 # connect to db
 .table # list all tables
 .exit # quit 
 ```
-![App running](./images/django_server.jpg)
 ### Run the Django app on development server
+![App running](./images/django_server.jpg)
+
+# Module 2: User Management Overview
+Now, you have the initial Django application built and deployed. In the next step, the admins of the dealership will review the app to identify users and manage their accesses based on roles (such as anonymous users or registered users). To accomplish this, you need to add authentication and authorization, that is, user management, to the app. In this lesson, you need to perform the following tasks to add the user management feature:
+
+- Create a superuser for your app [Admin login](http://127.0.0.1:8000/admin/)
+- Build the Client side and configure it.
+- Check the Client configuration.
+- Add a Login view to handle login requests.
+- Add a Logout view to handle logout requests.
+- Add a Registration view to handle Sign-up requests.
+
+- Follow the [instructional lab](./lectures/) to complete the above tasks step by step.
+### Requirement to run npm command
+#### Install Node16 using nvm:
+- Install [nvm](https://github.com/nvm-sh/nvm)
+- Install node 16 that is compatible with Mac 11.3.1
+- Create a simple [node web server](https://nodejs.org/docs/latest/api/synopsis.html#example)
+```
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+zsh: source ~/.zshrc # refress zsh file
+nvm --version # check if nvm is installed
+nvm ls-remote # fetch the list all node versions
+nvm install <version-of-node-in-the-list>
+node --version # check installed version
+npm --version
+nvm ls # give info of installed version on local
+nvm use <version-want-to-use> # switch between different node versions
+
+# create any folder to store your .js server
+mkdir nodeDemo
+cd nodeDemo
+touch hello.js
+ls
+code hello.js # open .js in VS code 
+# insert code 
+
+const http = require('node:http');
+
+const hostname = '127.0.0.1';
+const port = 3000;
+
+const server = http.createServer((req, res) => {
+res.statusCode = 200;
+res.setHeader('Content-Type', 'text/plain');
+res.end('Hello, World!\n');
+});
+
+server.listen(port, hostname, () => {
+console.log(`Server running at http://${hostname}:${port}/`);
+});
+
+###########################
+node hello.js # to run server
+```
+#### Install Node: this way does not work for Mac 11.3.1.
+```
+brew install node
+which npm # Example output: /usr/local/bin/npm
+export PATH=$PATH:<node's bin path>
+# e.g: export PATH=$PATH:/usr/local/bin
+source ~/.bashrc
+npm -v # check if the setting path is working
+```
+
+### Users
+Some users are available. You can use some [free temporary email](https://10minutemail.com/)
+- admin/admin
+
+# How to build and run Node and Django
+1. If there is change in FE --> build it again
+2. If there is change in model, Db --> migrate them
+2. Then run Django app
+```
+cd <frontend folder where there is package.json>
+npm run build
+cd <project Djang folder where there is manage.py>
+python3 manage.py check
+
+python3 manage.py makemigrations
+python3 manage.py migrate
+
+python3 manage.py runserver
+```
 
 # Reference
 1. [CSS syntax explained](https://www.wa4e.com/code/css/)
