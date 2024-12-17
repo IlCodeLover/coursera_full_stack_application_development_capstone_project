@@ -61,7 +61,10 @@ ROOT_URLCONF = 'djangoproj.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'frontend/static')],
+        'DIRS': [os.path.join(BASE_DIR,'frontend/static'),
+                 os.path.join(BASE_DIR, 'frontend/build'),
+                 os.path.join(BASE_DIR, 'frontend/build/static')
+                 ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -125,7 +128,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+# Django will collect all static files from all the apps
+# and directories listed in STATICFILES_DIRS
+# when you run python manage.py collectstatic
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 MEDIA_ROOT = os.path.join(STATIC_ROOT, 'media')
 MEDIA_URL = '/media/'
 
@@ -134,5 +141,10 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR,'frontend/static')]
+# In production: it tells Django where to look for additional static files in your project
+# (outside of the default static directory for each app)
+STATICFILES_DIRS = [os.path.join(BASE_DIR,'frontend/static'),
+                    os.path.join(BASE_DIR, 'frontend/build'),
+                    os.path.join(BASE_DIR, 'frontend/build/static')
+                    ]
 
