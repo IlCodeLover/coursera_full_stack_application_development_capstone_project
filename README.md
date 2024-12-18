@@ -3,6 +3,33 @@
 [Full Stack Application Development Capstone Project
 ](https://www.coursera.org/learn/ibm-cloud-native-full-stack-development-capstone/home/info)
 
+## Tech stack
+![Tech stack](./images/Full_stack_tech_stack.png)
+
+## Course objective
+1. Module 1: 
+   - Project scenario, forking, cloning, 
+   - static web page
+2. Module 2
+   - Add user management (FE: React, JS, html), BE (Django); 
+   - Add session management
+3. Module 3: 
+    - Create backend services in JavaScript
+    - Containerize MongoDB and Express server
+    - Deploy sentiment analyzer microservice using IBM Cloud Code Engine
+4. Module 4
+    - Create dynamic pages for details and reviews
+    - Create user-friendly and aesthic front-end pages to provide it to users
+5. Module 5
+    - Implement CI/CD with Github workflow for linting
+    - Make Epress-Mongo server running on Docket
+    - Sentiment analyzer microservice
+    - Make app available to run on a container
+    - Add deploy artifacts to app so that it can be managed by Kubernetes (K8)
+6. Module 6
+   - Submission
+   - peer grade review
+   
 ## Project requirement
 A national car dealership with local branches spread across the United States recently conducted a market survey. One of the suggestions that emerged from the survey was that customers would find it beneficial if they could access a central database of dealership reviews across the country.
 
@@ -48,8 +75,7 @@ On submission, the user should be taken back to the dealership detail page with 
 -  Log in to the admin site with a predefined username and password.
 - Add new make, model, and other attributes.
   Your organization has assigned you as the Lead Full-Stack Software Developer on this project. Your job is to develop this portal as part of your Capstone project by following best practices for Full-Stack software development.
-## Course resource
-7 modules
+
 
 # Module 1: Create static page About us, Contact us
 The Django app will be mainly used for user management and authentication, managing car models and makes, and routing other MongoDB services for dealership and customer reviews. You will build this Django app and related services in a phased manner along the capstone course.
@@ -166,6 +192,93 @@ python3 manage.py migrate
 
 python3 manage.py runserver
 ```
+# Module 3
+## Make Django app talk to MongoDB (NoSQL) using backend service developed in JavaScript
+- Working with Mongoose to provide API endpoints
+> Node app use *mongoose* to interact iwth the MongoDB
+- We write backend services in an Express app and deploy it on IBM Code Engine.
+- Students are provided 2 schema files: dealerships.js and reviews.js and their data in json files.
+``` 
+# review.js
+const mongoose = require('mongoose');
+
+const Schema = mongoose.Schema;
+
+const reviews = new Schema({
+	id: {
+    type: Number,
+    required: true,
+	},
+	name: {
+    type: String,
+    required: true
+  },
+  dealership: {
+    type: Number,
+    required: true,
+  },
+  review: {
+    type: String,
+    required: true
+  },
+  purchase: {
+    type: Boolean,
+    required: true
+  },
+  purchase_date: {
+    type: String,
+    required: true
+  },
+  car_make: {
+    type: String,
+    required: true
+  },
+  car_model: {
+    type: String,
+    required: true
+  },
+  car_year: {
+    type: Number,
+    required: true
+  },
+});
+
+module.exports = mongoose.model('reviews', reviews);
+
+``` 
+
+And data records "reviews.json"
+```
+{
+  "reviews": [
+    {
+      "id": 1,
+      "name": "Berkly Shepley",
+      "dealership": 15,
+      "review": "Total grid-enabled service-desk",
+      "purchase": true,
+      "purchase_date": "07/11/2020",
+      "car_make": "Audi",
+      "car_model": "A6",
+      "car_year": 2010
+    },
+    {
+      "id": 2,
+      "name": "Gwenora Zettoi",
+      "dealership": 23,
+      "review": "Future-proofed foreground capability",
+      "purchase": true,
+      "purchase_date": "09/17/2020",
+      "car_make": "Pontiac",
+      "car_model": "Firebird",
+      "car_year": 1995
+    },
+  ...
+  ]
+}
+```
+
+
 
 # Reference
 1. [CSS syntax explained](https://www.wa4e.com/code/css/)
