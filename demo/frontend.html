@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontend</title>
+    <script>
+        async function submitData() {
+          // Get input values
+          const name = document.getElementById('name').value;
+          const message = document.getElementById('message').value;
+
+          // Check if name and message are filled
+          if (!name || !message) {
+            alert("Please fill in both fields!");
+            return;
+          }
+
+          // Prepare the data to send
+          const data = {
+            name: name,
+            message: message
+          };
+
+
+          try {
+            // Send POST request to the backend
+            const response = await fetch('http://localhost:3000/submit', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data)
+            });
+
+            // Parse the response
+            const result = await response.json();
+
+            // Display the response on the page
+            document.getElementById('response').textContent = JSON.stringify(result);
+          } catch (error) {
+            console.error('Error:', error);
+            alert('Something went wrong, please try again!');
+          }
+        }
+    </script>
+</head>
+<body>
+<h1>Frontend - Submit Data</h1>
+
+<label for="name">Name:</label>
+<input type="text" id="name"><br><br>
+
+<label for="message">Message:</label>
+<input type="text" id="message"><br><br>
+
+<button onclick="submitData()">Submit</button>
+
+<h2>Response:</h2>
+<pre id="response">Response will be displayed here after "Submit": </pre>
+</body>
+</html>
