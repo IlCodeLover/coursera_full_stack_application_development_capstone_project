@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<script>
+    function goodBye() {
+      document.getElementById("demo").innerHTML = "Good bye from a function.";
+    }
+</script>
+<body>
+
+<h2>What Can JavaScript Do?</h2>
+
+<p id="demo">JavaScript can change HTML content.</p>
+
+<button type="button" onclick="document.getElementById('demo').innerHTML = 'Hello JavaScript!'">Say Hello!</button>
+
+<button type="button" onclick="goodBye()">Click to run goodBye()</button>
+
+<p id="math"> Calculate </p>
+<script>
+    var x = 5;
+    var y = 6;
+    var z = x + y;
+    document.getElementById("math").innerHTML =
+    "The value of z is: " + z;
+</script>
+
+<h1> 2. How JS makes code running on browsers (Google's V8)</h1>
+<h2 id="greeting"></h2>
+<button onclick="changeGreeting()">Input your name</button>
+
+<script>
+    // This script runs directly in the browser
+    document.getElementById("greeting").innerText = "Hello, welcome to the page!";
+
+    function changeGreeting() {
+      const userName = prompt("What's your name?");
+      if (userName) {
+        document.getElementById("greeting").innerText = `Hello, ${userName}!`;
+      } else {
+        document.getElementById("greeting").innerText = "Hello, stranger!";
+      }
+    }
+</script>
+</body>
+</html>
