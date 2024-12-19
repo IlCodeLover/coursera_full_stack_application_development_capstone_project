@@ -14,8 +14,9 @@
    - Add user management (FE: React, JS, html), BE (Django); 
    - Add session management
 3. Module 3: 
-    - Create backend services in JavaScript
-    - Containerize MongoDB and Express server
+    - Create backend services in JavaScript, e.g: database/app.js
+    - Build the Docker app 
+    - Containerize MongoDB and Express server using docker-compose.yml
     - Deploy sentiment analyzer microservice using IBM Cloud Code Engine
 4. Module 4
     - Create dynamic pages for details and reviews
@@ -278,8 +279,98 @@ And data records "reviews.json"
 }
 ```
 
+- Build a docker app
+```
+docker ps -a / check all status containers
+docker images // list images
+
+docker volume ls // list volume
+docker inspect <volumn-id> # check mounting 
+ 
+docker build . -t nodeapp # create images for Node app
+docker-compose up # create 2 containers for Mongo (download image from Docker hub) and Node app (from local images)
+
+# after finishing your test, you should stop them
+docker ps
+
+# only stop the service (not delete)
+docker stop <three-first-digit container id>
+
+# remove all services
+docker-compose down
+
+# remove services and their volumes (persistent storage) of these service
+docker-compose down --volumes
+docker volume prune # delete anonymous volume auto created by Docker
 
 
+
+# remove image
+docker rmi <image_name> # remove image
+
+
+```
+
+Test all endpoints by replacing URLs in address bar
+```
+docker-compose up // to run Node app and MongoDB in containers
+# alternative, to start server locally
+node app.js
+
+http://localhost:3030/ --> Welcome to the Mongoose API
+http://localhost:27017/ --> It looks like you are trying to access MongoDB over HTTP on the native driver port.
+http://localhost:3030/fetchReviews
+http://localhost:3030/fetchReviews/dealer/15
+
+curl http://localhost:3030/fetchReviews/dealer/15
+curl http://localhost:3030/fetchDealers
+curl http://localhost:3030/fetchDealer/3
+
+```
+
+### Re-Build and Restart services after changing code
+```
+# option 1 --> issue: existing container is not updated with new changes in app.js
+docker-compose up --build # build and restart
+
+# option 2: work ok, but not a good practice to fix image name
+docker-compose down --volumes
+docker rmi nodeapp
+docker build . -t nodeapp
+docker-compose up
+docker-compose down --volumes
+
+```
+
+#### option 3 (RECOMMEND): modify docker-compose to build Node app
+```
+# modify docker-compose file
+  api:
+    #image: nodeapp # remove the prebuild image
+    build: . # tell Docker to build the image for Node app before running the api service, ./ is the current dir where Dockerfile is
+    ports:
+      - 3030:3030
+    depends_on: # depends_on ensures mongo_db container running first and then starts the api container.
+      - mongo_db
+      
+Ctr + C: to stop all services running (if yes)
+
+# rebuild nodeapp image (even thought it exists nodeapp:latest) because the code in app.js has changed
+# output --> naming to docker.io/library/database-api
+docker-compose build 
+ 
+
+docker-compose up # it will use the new image it build "database-api" to start a service for Node app.
+```
+
+## Check MongoDb
+```
+# start container for MongoDB
+docker exec -it db_container mongosh # mongo_db
+use dealershipsDB # connect to DB name <>
+show collections
+db.<table-name>.find().pretty()
+```
 # Reference
 1. [CSS syntax explained](https://www.wa4e.com/code/css/)
 2. 
