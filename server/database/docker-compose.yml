@@ -9,14 +9,14 @@ services:
       - 27017:27017
     restart: always
     volumes:
-      - mongo_data:/data/db
+      - mongo_data:/data/db # volumn is used to store persist data or share data between the container and the host system.
 
   # Node api service
   api:
     image: nodeapp
     ports:
       - 3030:3030
-    depends_on: 
+    depends_on: # depends_on ensures mongo_db container running first and then starts the api container.
       - mongo_db
 
 volumes:
