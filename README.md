@@ -363,13 +363,40 @@ docker-compose build
 docker-compose up # it will use the new image it build "database-api" to start a service for Node app.
 ```
 
-## Check MongoDb
+### Check MongoDb
 ```
 # start container for MongoDB
 docker exec -it db_container mongosh # mongo_db
 use dealershipsDB # connect to DB name <>
 show collections
 db.<table-name>.find().pretty()
+```
+
+## Module 3.2: Buid CarModel and CarMake models
+```
+python3 manage.py makemigrations
+python3 manage.py migrate  # execute this when new/update models are created 
+python manage.py runserver
+# add CarMake, CarModel in model.py
+# register carMake, CarModel in admin.py
+python3 manage.py makemigrations
+python3 manage.py migrate --run-syncdb # option --run-syncdb allow creating tables for apps WITHOUT migrations
+
+# build client frontend
+cd ../frontend
+npm install # to install packages in package.json
+npm run build 
+
+# create djangoap/views, urls to fetch CarMake, CarModel
+# create sample data in populate.py, function initialize()
+
+# execute  on the terminal initialize() using python shell
+python3 manage.py shell
+>>>from djangoapp.populate import initiate
+>>>initiate()
+
+# go to http://127.0.0.1:8000/admin --> login --> see sample data
+ 
 ```
 # Reference
 1. [CSS syntax explained](https://www.wa4e.com/code/css/)
