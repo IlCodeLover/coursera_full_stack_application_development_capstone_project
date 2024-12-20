@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cars</title>
+  <script>
+    // Function to fetch car data and render it into a list
+    async function fetchCars() {
+        try {
+            let cars_url =  window.location.origin+"/djangoapp/get_cars";
+            const response = await fetch(cars_url, {
+              method: "GET",
+            });
+            const data = await response.json();
+
+            if (data.CarModels && data.CarModels.length > 0) {
+                const carsContainer = document.getElementById('cars-container');
+                data.CarModels.forEach(car => {
+                    const carRow = document.createElement('div');
+                    carRow.textContent = `Car Model: ${car.CarModel}, Car Make: ${car.CarMake}`;
+                    carsContainer.appendChild(carRow);
+                });
+            }
+        } catch (error) {
+            console.error('Error fetching car data:', error);
+        }
+    }
+
+    // Trigger fetchCars when the page loads
+    window.onload = fetchCars;
+  </script>
+</head>
+<body>
+<h1>Car Models</h1>
+<div id="cars-container">
+  <p> List of new cars </p>
+  <!-- Car records will be dynamically added here -->
+</div>
+</body>
+</html>
