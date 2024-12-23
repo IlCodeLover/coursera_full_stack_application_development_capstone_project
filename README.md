@@ -489,6 +489,9 @@ python3 manage.py makemigrations # create migration files
 python3 manage.py migrate # apply migration files to create tables in DB
 python3 manage.py runserver # start Django app
 
+# Step 4: Test some of endpoints:
+#curl http://localhost:3030/fetchReviews/dealer/28 # test only backend Node app 
+# curl http://127.0.0.1:8000/djangoapp/reviews/dealer/28 # test the Django app
 ```
 
 
