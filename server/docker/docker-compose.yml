@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  # Mongodb service
+  mongo_db:
+    container_name: db_container
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    restart: always
+    volumes:
+      - mongo_data:/data/db # volumn is used to store persist data or share data between the container and the host system.
+
+  # Node api service
+  api:
+    #image: nodeapp
+    build: . # tell Docker to build the image for Node app before running the api service, ./ is the current dir where Dockerfile is
+    ports:
+      - 3030:3030
+    depends_on: # depends_on ensures mongo_db container running first and then starts the api container.
+      - mongo_db
+
+    # Sentiment analyzer
+    # Sentiment Analyzer service
+  sentiment_service:
+    build:
+      context: ./djangoapp/microservices # Path to the folder containing the sentiment Dockerfile
+      dockerfile: Dockerfile # Name of the Dockerfile for the sentiment analyzer
+    ports:
+      - 5050:5050 # this port number is the same as the one in .env
+
+volumes:
+  mongo_data: {}
