@@ -20,5 +20,14 @@ services:
     depends_on: # depends_on ensures mongo_db container running first and then starts the api container.
       - mongo_db
 
+  # Sentiment analyzer
+    # Sentiment Analyzer service
+  sentiment_service:
+    build:
+      context: ../djangoapp/microservices # Path to the folder containing the sentiment Dockerfile
+      dockerfile: Dockerfile # Name of the Dockerfile for the sentiment analyzer
+    ports:
+      - 5050:5050 # this port number is the same as the one in .env
+
 volumes:
   mongo_data: {}
