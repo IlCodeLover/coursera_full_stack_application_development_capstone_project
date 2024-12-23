@@ -363,7 +363,7 @@ docker-compose build
 docker-compose up # it will use the new image it build "database-api" to start a service for Node app.
 ```
 
-### Check MongoDb
+### Check data in MongoDb 
 ```
 # start container for MongoDB
 docker exec -it db_container mongosh # mongo_db
@@ -371,6 +371,7 @@ use dealershipsDB # connect to DB name <>
 show collections
 db.<table-name>.find().pretty()
 ```
+
 
 ## Module 3.2: Buid CarModel and CarMake models
 ```
@@ -390,7 +391,7 @@ npm run build
 # create djangoap/views, urls to fetch CarMake, CarModel
 # create sample data in populate.py, function initialize()
 
-# execute  on the terminal initialize() using python shell
+# generating data by executing initialize() on the terminal via python shell
 python3 manage.py shell
 >>>from djangoapp.populate import initiate
 >>>initiate()
@@ -398,6 +399,101 @@ python3 manage.py shell
 # go to http://127.0.0.1:8000/admin --> login --> see sample data
  
 ```
+## Module 3.3: Create Django Proxy Services of Backend APIs
+- Finished tasks
+  - create container/service for MongDB to store external data: reviews, and dealers
+  - create container/service to host express API end points (from Django app)
+  - create CarModel, CarMake
+- TO DO:
+  - ingerate those models and services to manage all entities: dealers and reviews
+  - user sends a request to fetch reviews/dealers --> Express API endpoints (Django app) --> result returns in Dj views (can be seen as proxy services because it plays a role "middle man" btw a browser and a server.
+
+
+```
+###########################################################
+# Environment setup 
+###########################################################
+cd <folder with docker-compose file>
+docker-compose build
+docker-compose up # at this point, there are 2 serives running: mongo and nodeapp
+
+# backend url: http://localhost:3030
+# add that "backend url" in djangoap/.env
+# backend_url = http://localhost:3030 (without the slash / at the end
+
+# Open another terminal
+cd <folder containg manage.py>
+python3 manage.py makemigrations
+python3 manage.py migrate
+python3 manage.py runserver
+
+###########################################################
+# Task: Create function to interact with backend in djangoapp/restapi.py
+###########################################################
+def get_request(endpoint, **kwargs):
+    ...
+###########################################################  
+# Task: Deploy sentiment analysis on Code Engine as a mircroservice
+# I create images of sentimen analysis in Docker-compose so that i can run it locally withou IBM App Engine
+###########################################################
+  # Sentiment analyzer
+    # Sentiment Analyzer service
+  sentiment_service:
+    build:
+      context: ../djangoapp/microservices # Path to the folder containing the sentiment Dockerfile
+      dockerfile: Dockerfile # Name of the Dockerfile for the sentiment analyzer
+    ports:
+      - 3031:3031
+###########################################################
+# Task: create Django views to get entities dealder, reviews
+###########################################################
+# see restapis.py, views.py, urls.py
+
+
+```
+
+
+## Build image for sentiment analyzer
+```
+docker build . -t senti_analyzer
+
+# docker run image and mapping <browser's port><container's port>
+docker run -p 3031:3031 <image-name>
+curl http://localhost:3031 # on your host machine
+curl http://localhost:3031/analyze/The%20product%20is%20amazing%20and%20highly%20recommended
+#--> {"sentiment": "positive"}%  
+```
+
+### Update all images into one Docker-compose
+```
+cd <folder with docker-compose>
+docker-compose up --build
+```
+
+### Run your lab
+```
+# Start microservices: MongoDB, Node app, Sentiment analyzer
+cd <folder with docker-compose>
+docker-compose build
+docker-compose up
+
+# Step 2: populate data in MongoDB (if there is no existing data/ you deleted the volumn of db)
+python3 manage.py shell
+>>>from djangoapp.populate import initiate
+>>>initiate()
+
+# Step 3: Start your Djangoapp
+cd <folder containg manage.py>
+python3 manage.py check # check if there is any error 
+python3 manage.py makemigrations # create migration files
+python3 manage.py migrate # apply migration files to create tables in DB
+python3 manage.py runserver # start Django app
+
+```
+
+
+
+# Module 4
 # Reference
 1. [CSS syntax explained](https://www.wa4e.com/code/css/)
 2. 
