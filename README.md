@@ -178,8 +178,8 @@ npm -v # check if the setting path is working
 Some users are available. You can use some [free temporary email](https://10minutemail.com/)
 - admin/admin
 
-# How to build and run Node and Django
-1. If there is change in FE --> build it again
+### How to build and run Node and Django
+1. If there is change in FE --> build it again using npm
 2. If there is change in model, Db --> migrate them
 2. Then run Django app
 ```
@@ -494,9 +494,46 @@ python3 manage.py runserver # start Django app
 # curl http://127.0.0.1:8000/djangoapp/reviews/dealer/28 # test the Django app
 ```
 
+# Module 4: Create dynamic pages for details and reviews
+* Prerequisites: 
+  - Django app running
+  - Node app running
+  - Sentiment analyzer running
+  - MongoDB running
+  - CarMake, CarModel, Dealer, Review data in DB
+  - Backend service with Express-MongoDB should be running on one of the terminals.
 
+```
+###########################################################
+# Task1: Add and set up React components fro Dealers page
+###########################################################
+# modify frontend/src/App.js to add Dealers component
+# modify djangoproj/urls.py and add the routes for Dealers in it
+# rebuild frontend app via npm (whenever any changes in frontend)
+cd <frontend folder>
+npm install
+npm run build
 
-# Module 4
+# start the backend Django app (can do it after/before starting FE, the BK will restarted if FB is changed
+
+###########################################################
+# Task2: Add REACT components Dealer showing reviews (by clicking on hyperlink under Dealer Name
+###########################################################
+<Route path="/dealer/:id" element={<Dealer />} />
+path('dealer/<int:dealer_id>/', TemplateView.as_view(template_name="index.html"))
+
+###########################################################
+# Task 3: Create a dealer details or review page
+###########################################################
+# components/Dealers/PostReview.jsx
+
+# Task 4: add postreview 
+```
+Sample http://127.0.0.1:8000/dealers/ ( index.html is loaded as entry point, then is routed to React components http://127.0.0.1:8000/djangoapp/get_dealers)
+![get_dealers](./images/djangoapp_get_dealers.png)
+Sample http://127.0.0.1:8000/djangoapp/dealer/9
+![dealer/id](./images/djangoapp_dealer_id.png)
+
 # Reference
 1. [CSS syntax explained](https://www.wa4e.com/code/css/)
 2. 
