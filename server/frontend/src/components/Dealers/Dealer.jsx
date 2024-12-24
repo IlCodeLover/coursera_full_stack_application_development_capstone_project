@@ -9,8 +9,14 @@ import review_icon from "../assets/reviewbutton.png"
 import Header from '../Header/Header';
 
 const Dealer = () => {
-
-
+    /**
+     * Dealer functional React component.
+     *
+     * This component is responsible for fetching and displaying information about a specific car dealer,
+     * including the dealer's details and reviews. It uses React hooks such as useState and useEffect to manage state and side effects.
+     *
+     */
+  // usestate() to create a pair [state variable to store its current state, state function to update that state]
   const [dealer, setDealer] = useState({});
   const [reviews, setReviews] = useState([]);
   const [unreviewed, setUnreviewed] = useState(false);
@@ -20,18 +26,25 @@ const Dealer = () => {
   let root_url = curr_url.substring(0,curr_url.indexOf("dealer"));
   let params = useParams();
   let id =params.id;
+
+  // mapping the url to the backend Djangoapp API
   let dealer_url = root_url+`djangoapp/dealer/${id}`;
   let reviews_url = root_url+`djangoapp/reviews/dealer/${id}`;
   let post_review = root_url+`postreview/${id}`;
-  
+
+  // the function fetches dealer information from a specified URL (Djangoapp backend endpoints)and updates the component's state with the retrieved data.
   const get_dealer = async ()=>{
+    // send request to the backend API
     const res = await fetch(dealer_url, {
       method: "GET"
     });
-    const retobj = await res.json();
+    const retobj = await res.json(); // parse the response as JSON
     
     if(retobj.status === 200) {
+        // extract dealer info from response and convert it to array
       let dealerobjs = Array.from(retobj.dealer)
+
+      // dealer is stored in component's <Dealer> using setDealer
       setDealer(dealerobjs[0])
     }
   }
@@ -57,6 +70,7 @@ const Dealer = () => {
   }
 
   useEffect(() => {
+      //The useEffect hook calls the get_dealer function to fetch the dealer information when the Dealer component is mounted (is first rendered to the DOM)
     get_dealer();
     get_reviews();
     if(sessionStorage.getItem("username")) {
