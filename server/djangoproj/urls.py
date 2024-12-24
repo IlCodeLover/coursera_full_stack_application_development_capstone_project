@@ -37,7 +37,11 @@ urlpatterns = [
     path('dealers/', TemplateView.as_view(template_name="index.html")),
 
     # add the route for Dealer
-    path('dealer/<int:dealer_id>/', TemplateView.as_view(template_name="index.html"))
+    # allows the Django backend to serve the initial HTML file, and then the React application takes over to handle the client-side routing and rendering of components.
+    path('dealer/<int:dealer_id>/', TemplateView.as_view(template_name="index.html")),
+
+    # mapping the map in djangoapp and the map in React route
+    path('postreview/<int:dealer_id>', TemplateView.as_view(template_name="index.html")),
 
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

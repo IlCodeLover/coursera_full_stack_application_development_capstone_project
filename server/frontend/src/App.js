@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Register from "./components/Register/Register";
 import Dealers from "./components/Dealers/Dealers";
 import Dealer from "./components/Dealers/Dealer";
+import PostReview from "./components/Dealers/PostReview";
 
 function App() {
   return (
@@ -17,6 +18,9 @@ function App() {
 
       {/* New dealer route*/}
       <Route path="/dealer/:id" element={<Dealer />} />
+
+      {/* New post review route*/}
+      <Route path="/postreview/:id" element={<PostReview />} />
     </Routes>
   );
 }
