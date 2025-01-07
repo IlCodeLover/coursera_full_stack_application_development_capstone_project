@@ -122,8 +122,29 @@ Now, you have the initial Django application built and deployed. In the next ste
 - Add a Registration view to handle Sign-up requests.
 
 - Follow the [instructional lab](./lectures/) to complete the above tasks step by step.
-### Requirement to run npm command
-#### Install Node16 using nvm:
+
+## Set up Django env
+Run the following to set up the django environment.
+```
+cd /home/project/xrwvm-fullstack_developer_capstone/server pip install virtualenv
+virtualenv djangoenv
+source djangoenv/bin/activate
+
+python3 manage.py check
+python3 manage.py makemigrations 
+python3 manage.py migrate 
+
+# stop the server if running
+python3 manage.py createsuperuser # give name, password and any email (even not real one)
+
+python3 manage.py runserver
+```
+
+3. Install the required packages by running the following command.
+   python3 -m pip install -U -r requirements.txt
+
+## Requirement to run npm command
+### Install Node16 using nvm:
 - Install [nvm](https://github.com/nvm-sh/nvm)
 - Install node 16 that is compatible with Mac 11.3.1
 - Create a simple [node web server](https://nodejs.org/docs/latest/api/synopsis.html#example)
@@ -469,6 +490,41 @@ curl http://localhost:3031/analyze/The%20product%20is%20amazing%20and%20highly%2
 cd <folder with docker-compose>
 docker-compose up --build
 ```
+## Deploy sentiment analysis on Code Engine as a mircroservice
+```
+### create a code engine project. After a project is created, click on Code Engine CLI
+name:       Code Engine - sn-labs-ilcodelover  
+ID:         ccde0e11-6dbe-4683-a9e1-c8c87962b727  
+Subdomain:  1q2yzhoqdo1j  
+Domain:     us-south.codeengine.appdomain.cloud  
+Region:     us-south
+
+Kubernetes Config:    
+Context:               1q2yzhoqdo1j  
+Environment Variable:  export KUBECONFIG="/home/theia/.bluemix/plugins/code-engine/Code En
+
+SN_ICR_NAMESPACE = sn-labs-ilcodelover
+
+### build image for sentiment analyzer ; push it on IBM cloud container registry and deploy it on app engine IBM (using code engine CLI)
+ibmcloud ce project current
+cd <folder contain Docker image of sentiment analyzer
+docker build . -t us.icr.io/${SN_ICR_NAMESPACE}/senti_analyzer
+docker push us.icr.io/${SN_ICR_NAMESPACE}/senti_analyzer
+ibmcloud ce application create --name sentianalyzer --image us.icr.io/${SN_ICR_NAMESPACE}/senti_analyzer --registry-secret icr-secret --port 5000
+ibmcloud ce application delete --name sentianalyzer
+
+
+### check if the image is public or not
+ibmcloud cr image-inspect us.icr.io/${SN_ICR_NAMESPACE}/senti_analyzer
+
+Run 'ibmcloud ce application get -n sentianalyzer' to check the application status.
+OK
+
+```
+1. sentiment: https://sentianalyzer.1q7comj3m8s7.us-south.codeengine.appdomain.cloud
+2. frontend djangoapp: https://ilcodelover-8000.theiadockernext-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealer/2
+3. backend nodeapp Express: https://ilcodelover-3030.theiadockernext-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai"
+4. MongoDB: 
 
 ### Run your lab
 ```
@@ -534,6 +590,68 @@ Sample http://127.0.0.1:8000/dealers/ ( index.html is loaded as entry point, the
 Sample http://127.0.0.1:8000/djangoapp/dealer/9
 ![dealer/id](./images/djangoapp_dealer_id.png)
 
+# Module 5: CI/CD overview
+
+## Install Flake8 to check Python coding convention
+```python
+pip install flake8
+```
+
+- Open Setting --> search Flake8 --> enable it, and enable Notification
+- On VS Code/IntelliJ: You will see the hightlights (red, yellow) on the top right small window. 
+- On IntelliJ, select Problem panel. On Project Errors, select Inspect Code. This code analysis show different errors than running flake8 command. I don't know the reason!
+
+```
+# Check the standard for a specific file
+cd <folder-contain-file.py>
+flake8 file.py
+
+# Check the standard flake for a folder
+cd <folder-need-to-validate>
+flake8
+
+```
+
+We can also create a .flake8 config file at the project root folder and explicitly define our rules. I stored this file at this path: project\server\
+```
+[flake8]
+ignore = E203, E266, W503
+# max-line-length = 88
+exclude = .git, __pycache__, build, dist, migrations, venv
+max-complexity = 10
+select = B,C,E,F,W,T4,B9
+format = default
+```
+
+## Install jshint to check javascript coding convention
+```
+# open terminal and install jshint globally
+npm install -g jshint
+export PATH=$PATH:$(npm bin -g)
+source ~/.zshrc
+
+# check standard 
+jshint <name of folder or .>
+```
+
+
+## Github action workflow
+Set up CI/CD pipeline for the Django app using GitHub Actions.
+- go to github --> select Action
+- creete a new workflow 
+- add code file in .github/workflows/main.yml
+
+Whenever there is commit or PR, the workflow will run.
+## Containerize & Deploy to Kubernetes
+In line with the latest trends in technology and to avoid vendor lock-in, your management team is looking to deploy the dealership application to multiple clouds. The application is currently running on Code Engine, but you have been told not all cloud providers have a hosted Code Engine service. You are put in charge to look at containers as a possible way to mitigate this problem as all the big cloud providers have a way to host and manage containers. When containerizing an application, the process includes packaging an application with its relevant environment variables, configuration files, libraries, and software dependencies. The result is a container image that can then be run on a container platform.  You are also asked to use Kubernetes to manage the containerized deployment. Kubernetes is an open-source container orchestration platform that automates the deployment, management, and scaling of applications.
+
+
+In this module you will:
+- Add the ability to your application to run in a container
+- Add deployment artifacts for your application so it can be managed by Kubernetes
+- The management is interested in using the hybrid cloud strategy, where some applications and services reside on a private cloud and others on a public cloud. So, Kubernestes is a solution. 
+
+# Module 6: 
 # Reference
 1. [CSS syntax explained](https://www.wa4e.com/code/css/)
 2. 
